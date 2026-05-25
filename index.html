@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Optimization -->
+  <title>Oleksii Burlaka | Game Developer Portfolio</title>
+  <meta name="description" content="Portfolio of Oleksii Burlaka, Unity Game Developer specialized in robust game architecture, SOLID principles, and WebGL/mobile optimization. Explore the hero's path.">
+  <meta name="keywords" content="Oleksii Burlaka, Game Developer, Unity Developer, Portfolio, Gamified Scroll, C#, Zenject, SOLID">
+  <meta name="author" content="Oleksii Burlaka">
+  
+  <!-- Google Fonts for Modern Gamified Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- The Hero's Path & Scroll-Linked Progress Indicators -->
+  <div id="path-container">
+    <div id="path-line"></div>
+    <div id="path-active-line"></div>
+    <div id="avatar" role="img" aria-label="Glowing Hero Avatar">
+      <div class="avatar-core"></div>
+      <div class="avatar-glow"></div>
+    </div>
+  </div>
+
+  <!-- Primary Scrolling Viewport Content -->
+  <main id="scroll-wrapper">
+    
+    <!-- Hero Section Profile -->
+    <section id="hero" class="game-section">
+      <div class="hero-card" id="hero-content">
+        <!-- Dynmically loaded content from main.js / config.js -->
+        <p class="loader-placeholder">Loading Hero Profile...</p>
+      </div>
+    </section>
+    
+    <!-- Games Timeline Section -->
+    <section id="games-timeline">
+      <!-- Dynamically populated by main.js -->
+    </section>
+
+  </main>
+
+  <!-- Core JavaScript Configurations and Logic -->
+  <script src="config.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
