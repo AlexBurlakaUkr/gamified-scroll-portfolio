@@ -10,7 +10,11 @@ const translations = {
     heroLevel: "Level 1 Developer",
     loading: "Loading Hero Profile...",
     timelineTitle: "Quest Log: Completed Games",
-    playButtonText: "Launch Game"
+    playButtonText: "Launch Game",
+    skillsTitle: "Tech Tree: Unlocked Perks",
+    branchEngine: "Engine Core & WebGL",
+    branchArch: "Architecture & SOLID",
+    branchOps: "Publishing & Systems"
   }
 };
 
@@ -115,6 +119,107 @@ function injectTimeline() {
   timelineSection.innerHTML = htmlContent;
 }
 
+/**
+ * Maps a skill name to a thematic RPG icon character.
+ * @param {string} skillName - Name of the skill.
+ * @returns {string} Unicode symbol icon.
+ */
+function getSkillIcon(skillName) {
+  const icons = {
+    "Unity (C#)": "❖",
+    "OOP / SOLID": "⬢",
+    "Game Architecture": "⎔",
+    "Android / WebGL": "🌐",
+    "Zenject": "☯",
+    "DOTween": "⏩",
+    "Git": "🌿",
+    "Firebase / Analytics": "🔥",
+    "Monetization (AdMob/AppLovin)": "💰",
+    "Performance Optimization": "⚡"
+  };
+  return icons[skillName] || "★";
+}
+
+/**
+ * Dynamically renders the skills tech tree categorized by branching specializations.
+ */
+function injectSkills() {
+  const skillsSection = document.getElementById('skills');
+  if (!skillsSection) {
+    console.error("Critical Failure: Element #skills not found in the DOM.");
+    return;
+  }
+
+  if (typeof portfolioData === 'undefined' || !portfolioData.skills) {
+    console.error("Critical Failure: portfolioData.skills is missing.");
+    return;
+  }
+
+  // Branch mapping to group static skills into thematic RPG categories
+  const branchDefinitions = [
+    {
+      title: getTranslation("branchEngine"),
+      color: "#00f2fe", // Neon Cyan
+      skills: ["Unity (C#)", "Android / WebGL", "DOTween"]
+    },
+    {
+      title: getTranslation("branchArch"),
+      color: "#a154ff", // Cyber Violet
+      skills: ["OOP / SOLID", "Game Architecture", "Zenject", "Git"]
+    },
+    {
+      title: getTranslation("branchOps"),
+      color: "#ffd700", // Level Up Gold
+      skills: ["Firebase / Analytics", "Monetization (AdMob/AppLovin)", "Performance Optimization"]
+    }
+  ];
+
+  let htmlContent = `
+    <div class="skills-container">
+      <h2 class="timeline-main-title">${getTranslation('skillsTitle')}</h2>
+      <div id="skill-tree" style="margin-top: 3rem;">
+  `;
+
+  let globalSkillIndex = 0;
+
+  branchDefinitions.forEach((branch) => {
+    htmlContent += `
+      <div class="perk-branch" style="--branch-color: ${branch.color};">
+        <h3 class="branch-title" style="color: var(--text-muted);">
+          <span style="color: ${branch.color};">◆</span>
+          ${branch.title}
+        </h3>
+        <div class="branch-skills-grid">
+    `;
+
+    branch.skills.forEach((skill) => {
+      // Calculate transition-delay dynamically for a staggered unlock animation
+      const delay = globalSkillIndex * 80;
+      htmlContent += `
+        <div class="skill-node" style="--branch-color: ${branch.color}; transition-delay: ${delay}ms;" data-skill="${skill}">
+          <div class="skill-icon-placeholder">${getSkillIcon(skill)}</div>
+          <span class="skill-name">${skill}</span>
+        </div>
+      `;
+      globalSkillIndex++;
+    });
+
+    htmlContent += `
+        </div>
+      </div>
+    `;
+  });
+
+  htmlContent += `
+      </div>
+    </div>
+    <!-- The Terminal point of the Hero's Path -->
+    <div id="path-end-node"></div>
+  `;
+
+  skillsSection.innerHTML = htmlContent;
+}
+
 // Throttle variable for performance optimization
 let isUpdating = false;
 
@@ -183,6 +288,48 @@ function updateScrollEffects() {
       card.classList.remove('active');
     }
   });
+
+  // --- Skills Section Activation Logic ---
+  const skillsSection = document.getElementById('skills');
+  if (skillsSection) {
+    const skillsRect = skillsSection.getBoundingClientRect();
+    const skillsAbsoluteTop = scrollTop + skillsRect.top;
+    
+    // Staggered unlock triggers slightly earlier (20% of viewport height before avatar hits it)
+    const skillsActivationOffset = winHeight * 0.20;
+    
+    if (avatarAbsoluteTop + skillsActivationOffset >= skillsAbsoluteTop) {
+      skillsSection.classList.add('active');
+      
+      // Add unlocked state to branches and nodes (handles transition-delay animation)
+      const branches = skillsSection.querySelectorAll('.perk-branch');
+      branches.forEach(branch => branch.classList.add('unlocked'));
+      
+      const skillNodes = skillsSection.querySelectorAll('.skill-node');
+      skillNodes.forEach(node => node.classList.add('unlocked'));
+    } else {
+      skillsSection.classList.remove('active');
+      
+      const branches = skillsSection.querySelectorAll('.perk-branch');
+      branches.forEach(branch => branch.classList.remove('unlocked'));
+      
+      const skillNodes = skillsSection.querySelectorAll('.skill-node');
+      skillNodes.forEach(node => node.classList.remove('unlocked'));
+    }
+    
+    // Check if avatar has reached the terminal endpoint of the path
+    const endNode = document.getElementById('path-end-node');
+    if (endNode) {
+      const endRect = endNode.getBoundingClientRect();
+      const endAbsoluteTop = scrollTop + endRect.top + endRect.height / 2;
+      
+      if (avatarAbsoluteTop >= endAbsoluteTop) {
+        skillsSection.classList.add('passed');
+      } else {
+        skillsSection.classList.remove('passed');
+      }
+    }
+  }
 }
 
 /**
@@ -202,6 +349,7 @@ function handleScrollAndResize() {
 window.addEventListener('DOMContentLoaded', () => {
   injectHeroContent();
   injectTimeline();
+  injectSkills();
   updateScrollEffects();
 });
 

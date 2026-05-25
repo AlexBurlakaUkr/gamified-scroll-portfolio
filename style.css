@@ -545,6 +545,188 @@ body {
   transform: translateX(3px);
 }
 
+.game-play-btn:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+/* ==========================================
+   Skills Section (RPG Perk / Tech Tree)
+   ========================================== */
+#skills {
+  position: relative;
+  padding: 6rem 0 18rem 0; /* Plenty of padding for scroll room */
+  display: flex;
+  flex-direction: column;
+}
+
+.skills-container {
+  padding-left: calc(var(--path-x) + 5%);
+  max-width: 900px;
+  position: relative;
+}
+
+/* Branch of the Tech Tree */
+.perk-branch {
+  position: relative;
+  margin-bottom: 4rem;
+  padding-left: 2rem;
+  border-left: 2px dashed rgba(255, 255, 255, 0.05);
+  transition: border-color 0.8s ease;
+}
+
+.perk-branch.unlocked {
+  border-left-color: var(--branch-color, var(--color-accent));
+}
+
+/* Branch Connection Line to the Hero's Path */
+.perk-branch::after {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 1.5rem;
+  width: 5vw; /* Fills space back to the path line */
+  height: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  transform-origin: right;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.perk-branch.unlocked::after {
+  background: linear-gradient(90deg, var(--color-primary), var(--branch-color, var(--color-accent)));
+  box-shadow: 0 0 8px var(--branch-color, var(--color-accent));
+}
+
+.branch-title {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1.25rem;
+  transition: color 0.5s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.perk-branch.unlocked .branch-title {
+  color: var(--branch-color, var(--color-accent));
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+}
+
+.branch-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+/* The Skill Node: Gaming/RPG HUD look */
+.skill-node {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  transition: 
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+  
+  /* Initial Locked State */
+  opacity: 0.15;
+  filter: grayscale(1);
+  transform: translateY(20px) scale(0.95);
+}
+
+.skill-node.unlocked {
+  opacity: 1;
+  filter: grayscale(0);
+  transform: translateY(0) scale(1);
+  color: var(--text-primary);
+  border-color: var(--branch-color, var(--color-accent));
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(0, 242, 254, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+.skill-icon-placeholder {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+  color: var(--text-muted);
+}
+
+.skill-node.unlocked .skill-icon-placeholder {
+  border-color: var(--branch-color, var(--color-accent));
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--branch-color, var(--color-accent));
+  box-shadow: 0 0 8px var(--branch-color, var(--color-accent));
+}
+
+.skill-name {
+  flex-grow: 1;
+}
+
+/* Mastery Node: Terminal Point for the Hero's Path */
+#path-end-node {
+  position: absolute;
+  bottom: 12rem;
+  left: var(--path-x);
+  transform: translate(-50%, 50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg-dark);
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  z-index: 7;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#path-end-node::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  opacity: 0;
+  transition: all 0.5s ease-out;
+}
+
+#skills.passed #path-end-node {
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  box-shadow: 
+    0 0 15px var(--color-gold),
+    0 0 25px rgba(255, 215, 0, 0.5);
+}
+
+#skills.passed #path-end-node::after {
+  animation: node-pulse-anim 2s infinite ease-out;
+}
+
 /* Responsive Rules */
 @media (max-width: 768px) {
   :root {
@@ -616,5 +798,48 @@ body {
   .game-card.active {
     transform: translateY(0);
     opacity: 1;
+  }
+
+  /* Skills Section mobile overrides */
+  #skills {
+    padding-bottom: 10rem;
+  }
+
+  .skills-container {
+    padding-left: 0;
+    width: 100%;
+  }
+
+  .perk-branch {
+    border-left: none;
+    padding-left: 0;
+    margin-bottom: 2.5rem;
+  }
+
+  .perk-branch::after {
+    display: none;
+  }
+
+  .branch-title {
+    justify-content: center;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .branch-skills-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .skill-node {
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  #path-end-node {
+    bottom: 6rem;
   }
 }
