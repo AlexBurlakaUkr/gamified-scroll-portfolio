@@ -730,37 +730,40 @@ body {
 /* Responsive Rules */
 @media (max-width: 768px) {
   :root {
-    --path-x: 50%;
+    --path-x: 20px; /* Relocate path line, avatar, and nodes to the left edge */
   }
 
   body {
     background-size: 30px 30px;
-    min-height: auto; /* Let document height flow naturally */
+    min-height: auto;
   }
 
+  /* Shift wrapper content to the right of the path line */
   #scroll-wrapper {
-    padding: 0 1rem;
+    padding-left: 55px;
+    padding-right: 1.5rem;
   }
 
   .game-section {
-    justify-content: center;
+    justify-content: flex-start;
     padding-left: 0;
   }
 
   .hero-card {
     width: 100%;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
+    margin: 0;
+    padding: 2rem 1.25rem;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
   .hero-name {
-    font-size: 2.2rem;
+    font-size: clamp(1.8rem, 6vw, 2.6rem); /* Prevent awkward name wrapping */
+    line-height: 1.2;
   }
 
   .hero-spec {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   /* Timeline mobile adjustments */
@@ -771,23 +774,24 @@ body {
 
   .timeline-title-container {
     padding-left: 0;
-    text-align: center;
+    text-align: left;
     margin-bottom: 2rem;
   }
 
   .timeline-item {
-    justify-content: center;
+    justify-content: flex-start;
     min-height: auto;
   }
 
   .timeline-card-wrapper {
     margin-left: 0;
-    max-width: 290px;
+    max-width: 300px;
+    width: 100%;
     padding: 0;
   }
 
   .timeline-node {
-    z-index: 4; /* Keeps node visible as a background element */
+    z-index: 7; /* Keep nodes on top of the path line */
   }
 
   .game-card {
@@ -811,17 +815,20 @@ body {
   }
 
   .perk-branch {
-    border-left: none;
-    padding-left: 0;
+    border-left: 2px dashed rgba(255, 255, 255, 0.05); /* Dashboard grid border */
+    padding-left: 1.5rem;
     margin-bottom: 2.5rem;
   }
 
+  /* Connector line to the left-aligned Hero's Path */
   .perk-branch::after {
-    display: none;
+    display: block;
+    right: 100%;
+    width: 35px; /* Aligns perfectly back to the 20px path-line */
   }
 
   .branch-title {
-    justify-content: center;
+    justify-content: flex-start;
     font-size: 0.85rem;
     margin-bottom: 1rem;
   }
@@ -836,7 +843,7 @@ body {
     border-radius: 10px;
     font-size: 0.8rem;
     gap: 8px;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   #path-end-node {
