@@ -167,8 +167,13 @@ function updateScrollEffects() {
     const nodeRect = node.getBoundingClientRect();
     const nodeAbsoluteTop = scrollTop + nodeRect.top + nodeRect.height / 2;
 
-    // Trigger state modification if the scrolling avatar reaches or passes this node
-    if (avatarAbsoluteTop >= nodeAbsoluteTop) {
+    // Proximity activation offset (25% of viewport height)
+    // This allows the card/node to activate earlier, when the avatar approaches the checkpoint,
+    // ensuring the animation finishes while the card is in the comfortable lower-middle viewport area.
+    const proximityOffset = winHeight * 0.25;
+
+    // Trigger state modification if the scrolling avatar's sensory field reaches the node
+    if (avatarAbsoluteTop + proximityOffset >= nodeAbsoluteTop) {
       item.classList.add('passed');
       item.classList.add('active');
       card.classList.add('active');
